@@ -3,7 +3,6 @@ import { getPatients } from "../api/patient";
 import { Link } from "react-router-dom";
 
 const ShowPatients = ({ filteredPatient }) => {
-  console.log(filteredPatient, "filteredPatient");
   return (
     <div>
       {filteredPatient &&

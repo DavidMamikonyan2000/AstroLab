@@ -13,7 +13,6 @@ const UpdateSinglePatient = () => {
   const handleUpdatePatient = async (id) => {
     try {
       const res = await updatePatient(id);
-      console.log(res, "update");
       setShow(false);
     } catch (error) {}
   };
@@ -21,7 +20,7 @@ const UpdateSinglePatient = () => {
   return (
     <>
       <Button
-        variant="warning"
+        variant="primary"
         style={{ marginRight: "10px" }}
         onClick={handleShow}
       >

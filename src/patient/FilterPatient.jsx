@@ -1,19 +1,10 @@
-// {
-//     "firstName": "string",
-//     "lastName": "string",
-//     "phone": "string",
-//     "startDate": "2024-03-01",
-//     "endDate": "2024-03-01",
-//     "relevant": true
-//   }
-
 import { useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { filterPatient } from "../api/patient";
+import { filterPatient, findPatient } from "../api/patient";
 
 const FilterPatient = ({ setFilteredPatient }) => {
   const [show, setShow] = useState(false);
@@ -23,6 +14,7 @@ const FilterPatient = ({ setFilteredPatient }) => {
   const [username, setUsername] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [filterOnlyByDate, setFilterOnlyByDate] = useState("");
 
   const handleFilterPatient = async () => {
     const data = {
@@ -34,12 +26,19 @@ const FilterPatient = ({ setFilteredPatient }) => {
       endDate,
       relevant: true,
     };
-    try {
-      const res = await filterPatient(data);
-      setShow(false);
-      console.log(res, "res");
-      setFilteredPatient(res)
-    } catch (error) {}
+    if (!filterOnlyByDate.length) {
+      try {
+        const res = await filterPatient(data);
+        setShow(false);
+        setFilteredPatient(res);
+      } catch (error) {}
+    } else {
+      try {
+        const res = await findPatient(filterOnlyByDate);
+        setShow(false);
+        setFilteredPatient(res);
+      } catch (error) {}
+    }
   };
 
   const handleClose = () => setShow(false);
@@ -55,51 +54,91 @@ const FilterPatient = ({ setFilteredPatient }) => {
           <Modal.Title>Փնտրել հաճախորդին</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-              <Form.Control
-                type="text"
-                placeholder="Անուն"
-                autoFocus
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-              <Form.Control
-                type="text"
-                placeholder="Ազգանուն"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-              <Form.Control
-                type="number"
-                placeholder="Հեռախոսահամար"
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-              <Form.Control
-                type="text"
-                placeholder="Օգտագործողի անունը"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-              <Form.Control
-                type="date"
-                placeholder="Ծննդյան օր"
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-              <Form.Control
-                type="date"
-                placeholder="Ծննդյան օր"
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
+          <Tabs
+            defaultActiveKey="Փնտրել"
+            id="uncontrolled-tab-example"
+            className="mb-3"
+          >
+            <Tab eventKey="Փնտրել" title="Փնտրել">
+              <Form>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Անուն"
+                    autoFocus
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Ազգանուն"
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="number"
+                    placeholder="Հեռախոսահամար"
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="text"
+                    placeholder="Օգտագործողի անունը"
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="date"
+                    placeholder="Ծննդյան օր"
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="date"
+                    placeholder="Ծննդյան օր"
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </Form.Group>
+              </Form>
+            </Tab>
+            <Tab eventKey="Փնտրել Ամսաթվով" title="Փնտրել Ամսաթվով">
+              <Form>
+                <Form.Group
+                  className="mb-2"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Control
+                    type="date"
+                    placeholder="Ծննդյան օր"
+                    onChange={(e) => setFilterOnlyByDate(e.target.value)}
+                  />
+                </Form.Group>
+              </Form>
+            </Tab>
+          </Tabs>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

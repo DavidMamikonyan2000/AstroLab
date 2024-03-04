@@ -5,8 +5,6 @@ import Modal from "react-bootstrap/Modal";
 const ErrorModal = ({ error, setError }) => {
   const [isShow, setShow] = useState(error);
 
-  console.log(isShow);
-
   useEffect(() => {
     setShow(error);
   }, [error]);

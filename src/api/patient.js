@@ -15,6 +15,11 @@ export const addPatient = async (patient) => {
   return res;
 };
 
+export const findPatient = async (date) => {
+  const res = await api.get(`patients?date=${date}`).then((res) => res.data);
+  return res;
+};
+
 export const filterPatient = async (data) => {
   const res = await api.post("patients/filter", data).then((res) => res.data);
   return res;

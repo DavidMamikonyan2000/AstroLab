@@ -12,8 +12,6 @@ const AddPatient = () => {
   const [username, setUsername] = useState("");
   const [birthdate, setBirthdate] = useState("");
 
-  console.log(birthdate, "birthdate");
-
   const addNewPatient = async () => {
     const data = {
       firstName,
@@ -25,7 +23,6 @@ const AddPatient = () => {
     try {
       const res = await addPatient(data);
       setShow(false);
-      console.log(res, "res");
     } catch (error) {}
   };
 

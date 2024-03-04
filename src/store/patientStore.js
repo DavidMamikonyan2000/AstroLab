@@ -6,7 +6,6 @@ export const patientStore = {
     if (newPatient) {
       patients.push(...newPatient);
     }
-    console.log(patients, "patients");
     emitChange();
   },
   subscribe(listener) {
